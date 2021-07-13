@@ -28,7 +28,7 @@ public class Product extends RepresentationModel<Product> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     @Setter @Getter
     private String name; //should not be null
 

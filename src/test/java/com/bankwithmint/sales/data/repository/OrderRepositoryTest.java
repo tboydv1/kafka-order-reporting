@@ -82,11 +82,24 @@ class OrderRepositoryTest {
 
     private List<OrderProduct> initializeProducts(Order order){
         List<OrderProduct> orderProducts = new ArrayList<>();
+
         for(Product product : existingProducts ){
-            orderProducts.add(new OrderProduct(order, product, 1 + random.nextInt(10)));
+            int quantity = 1 + random.nextInt(10);
+            if(checkAvailability(product, quantity)) {
+                orderProducts.add(new OrderProduct(order, product, quantity));
+                product.setQuantityInStock(product.getQuantityInStock() - quantity);
+            }
         }
         return orderProducts;
     }
+
+    private boolean checkAvailability(Product product, int quantity){
+        return product.getQuantityInStock() >= quantity;
+    }
+
+
+
+
 
 
 

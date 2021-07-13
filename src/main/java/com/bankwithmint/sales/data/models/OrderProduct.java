@@ -30,7 +30,7 @@ public class OrderProduct {
 
     public OrderProduct(Order order, Product product, Integer quantity){
         this.orderProductKey = new OrderProductKey(order, product);
-        this.productPrice = product.getPrice().doubleValue();
+        this.productPrice = product.getPrice().doubleValue() * quantity;
         this.quantity = quantity;
     }
 }

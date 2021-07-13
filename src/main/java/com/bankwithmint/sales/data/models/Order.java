@@ -35,6 +35,8 @@ public class Order extends RepresentationModel<Order> {
     @CreationTimestamp
     private LocalDateTime dateCreated;
 
+    private Double TotalPrice;
+
     public Order(){
         orderProducts = new ArrayList<>();
     }

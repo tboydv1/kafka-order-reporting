@@ -72,4 +72,14 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.save(product);
 
     }
+
+    @Override
+    public boolean exists(Long productId) {
+        return productRepository.findById(productId).isPresent();
+    }
+
+    @Override
+    public Product findById(Long productId) {
+        return productRepository.findById(productId).orElse(null);
+    }
 }

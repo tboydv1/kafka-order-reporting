@@ -1,17 +1,14 @@
 package com.bankwithmint.sales.service.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EmbeddedKafkaIntegrationTest {
 
     @Autowired
-    private Producer producer;
+    private KafkaProducer kafkaProducer;
 
     @Autowired
     private Consumer consumer;
@@ -44,7 +41,7 @@ class EmbeddedKafkaIntegrationTest {
 
     @BeforeEach
     void setup(){
-        assertNotNull(producer);
+        assertNotNull(kafkaProducer);
         assertNotNull(consumer);
     }
 
@@ -55,7 +52,7 @@ class EmbeddedKafkaIntegrationTest {
         log.info("Topic value ==> {}", topic);
         assertThat(topic, notNullValue());
 
-        producer.send(topic, "This is a test message from the KafkaProducer");
+        kafkaProducer.send(topic, "This is a test message from the KafkaProducer");
         consumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
 
         assertThat(consumer.getLatch().getCount(), equalTo(0L));
