@@ -11,4 +11,6 @@ values
 (25, 'Speaker',  1400, 24,'this is a Surround Speaker'),
 (26, 'Roof Tops',  1400, 24,'this is a Roof Top');
 
+set FOREIGN_KEY_CHECKS = 1;
+
 
