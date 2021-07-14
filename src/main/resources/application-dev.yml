@@ -8,10 +8,10 @@ spring:
   jpa:
     hibernate.ddl-auto: create-drop
 
-  kafka:
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#  kafka:
+#    producer:
+#      bootstrap-servers: localhost:9092
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: package com.bankwithmint.sales.serializer.KafkaDataSerializer
 
 

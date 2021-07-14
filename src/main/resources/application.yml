@@ -2,7 +2,13 @@ spring:
   profiles:
     active: ${PROD:dev}
 
-topic: order-report
+server:
+  port: 9191
+
+topic: sales
+
+kafka:
+  bootstrapAddress: localhost:9092
 
 
 
