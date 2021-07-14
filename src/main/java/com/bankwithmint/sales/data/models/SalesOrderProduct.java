@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * @author oluwatobi
@@ -16,21 +17,28 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class OrdersProduct {
+public class SalesOrderProduct {
 
     @EmbeddedId
     @JsonIgnore
     private OrdersProductKey ordersProductKey;
 
     @Column(nullable = false)
-    private Double productPrice;
-
-    @Column(nullable = false)
     private Integer quantity;
 
-    public OrdersProduct(SalesOrder salesOrder, Product product, Integer quantity){
+    public SalesOrderProduct(SalesOrder salesOrder, Product product, Integer quantity){
         this.ordersProductKey = new OrdersProductKey(salesOrder, product);
-        this.productPrice = product.getPrice().doubleValue() * quantity;
         this.quantity = quantity;
     }
+
+    @Transient
+    public Product getProduct() {
+        return this.ordersProductKey.getProduct();
+    }
+
+    @Transient
+    public Double getTotalPrice() {
+        return getProduct().getPrice() * getQuantity();
+    }
+
 }

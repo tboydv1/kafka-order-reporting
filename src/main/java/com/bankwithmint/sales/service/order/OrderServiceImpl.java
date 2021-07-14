@@ -1,14 +1,17 @@
 package com.bankwithmint.sales.service.order;
 
+import com.bankwithmint.sales.client.exceptions.OrderNotCreatedExeption;
 import com.bankwithmint.sales.data.dto.OrderDto;
 import com.bankwithmint.sales.data.dto.OrderProductDto;
+import com.bankwithmint.sales.data.dto.OrderReportDto;
 import com.bankwithmint.sales.data.models.SalesOrder;
-import com.bankwithmint.sales.data.models.OrdersProduct;
+import com.bankwithmint.sales.data.models.SalesOrderProduct;
 import com.bankwithmint.sales.data.models.Product;
 import com.bankwithmint.sales.data.repository.OrderRepository;
-import com.bankwithmint.sales.data.repository.ProductRepository;
-//import com.bankwithmint.sales.service.kafka.KafkaProducer;
 import com.bankwithmint.sales.service.kafka.KafkaProducer;
+import com.bankwithmint.sales.service.product.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,13 +29,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderRepository orderRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    ProductService productService;
 
     @Autowired
     KafkaProducer kafkaProducer;
@@ -47,36 +50,68 @@ public class OrderServiceImpl implements OrderService{
 
 
     @Override
-    public SalesOrder createOrder(OrderDto orderDto) {
+    public SalesOrder createOrder(OrderDto orderDto) throws OrderNotCreatedExeption {
 
         SalesOrder salesOrder = new SalesOrder();
         salesOrder.setCustomer(orderDto.getCustomer());
-        List<OrdersProduct> ordersProducts = new ArrayList<>();
+        List<SalesOrderProduct> salesOrderProducts;
 
+        try {
+            writeLock.lock(); //to prevent concurrent modification
 
-        //check product availability
-        for(OrderProductDto orderProductDto : orderDto.getOrderProducts()){
-            Product product = productRepository.findById(orderProductDto.getProductId()).orElse(null);
-            if(product != null && product.getQuantityInStock() >= orderProductDto.getQuantity()){
+            //initializes orderProduct
+            salesOrderProducts = initializeProductOrders(salesOrder, orderDto.getOrderProducts());
 
-                ordersProducts.add(new OrdersProduct(salesOrder, product, orderProductDto.getQuantity()));
-
-                Integer newQuantity = Math.abs(product.getQuantityInStock() - orderProductDto.getQuantity());
-                product.setQuantityInStock(newQuantity);
-                productRepository.save(product);
-
+            if (!(salesOrderProducts.size() > 0)){
+                throw new OrderNotCreatedExeption("Order is not created --> please make sure product exists");
             }
+                salesOrder.setSalesOrderProducts(salesOrderProducts);
+                salesOrder = orderRepository.save(salesOrder);
+
+
+        }finally {
+            writeLock.unlock();
         }
 
-        salesOrder.setOrdersProducts(ordersProducts);
-        SalesOrder createdSalesOrder = orderRepository.save(salesOrder);
-        publishOrderReports(createdSalesOrder);
-        return createdSalesOrder;
+        publishOrderReports(salesOrder);
+
+        return salesOrder;
     }
 
-       private void publishOrderReports(SalesOrder salesOrder){
-        kafkaProducer.send(topic, salesOrder.toString());
+    private void publishOrderReports(SalesOrder salesOrder) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        OrderReportDto orderReportDto = new OrderReportDto();
+        orderReportDto.setOrderId(salesOrder.getId());
+        orderReportDto.setDateCreated(salesOrder.getDateCreated());
+        orderReportDto.setTotalPrice(salesOrder.getTotalOrderPrice());
+
+        try {
+            kafkaProducer.send(topic, objectMapper.writeValueAsString(orderReportDto.toString()));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
+
+    private boolean productIsAvailable(Product product, Integer quantity) {
+        return product != null && product.getQuantityInStock() >= quantity;
+    }
+
+    private List<SalesOrderProduct> initializeProductOrders(SalesOrder salesOrder, List<OrderProductDto> orderDto) {
+        List<SalesOrderProduct> products = new ArrayList<>();
+
+
+            for (OrderProductDto orderProductDto : orderDto) {
+                Product product = productService.findById(orderProductDto.getProductId());
+                if (productIsAvailable(product, orderProductDto.getQuantity())) {
+                    products.add(new SalesOrderProduct(salesOrder, product, orderProductDto.getQuantity()));
+                    productService.updateQuantity(product, orderProductDto.getQuantity());
+                }
+            }
+
+        return products;
+    }
 
 }

@@ -49,7 +49,7 @@ class ProductControllerTest {
     @Test
     void createNewProductTest() throws Exception {
 
-        Product product = new Product("Nails",  BigDecimal.valueOf(1400), 24,"this is a Shoe sized nails");
+        Product product = new Product("Nails",  1400.00, 24,"this is a Shoe sized nails");
 
         ObjectMapper mapper = new ObjectMapper();
 

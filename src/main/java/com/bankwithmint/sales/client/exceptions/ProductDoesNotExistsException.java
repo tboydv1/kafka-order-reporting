@@ -6,7 +6,7 @@ import java.security.PrivilegedActionException;
  * @author oluwatobi
  * @version 1.0
  * @date on 13/07/2021
- * inside the package - com.bankwithmint.sales.client.exceptions
+ * inside the package - com.bankwithmint.sales.exceptions
  */
 public class ProductDoesNotExistsException extends Throwable {
     /**

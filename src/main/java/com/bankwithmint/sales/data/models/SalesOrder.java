@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +31,23 @@ public class SalesOrder extends RepresentationModel<SalesOrder> {
     private Customer customer;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<OrdersProduct> ordersProducts;
+    private List<SalesOrderProduct> salesOrderProducts;
 
     @CreationTimestamp
-    private LocalDateTime dateCreated;
-
-    private Double TotalPrice;
+    private LocalDate dateCreated;
 
     public SalesOrder(){
-        ordersProducts = new ArrayList<>();
+        salesOrderProducts = new ArrayList<>();
     }
+
+    @Transient
+    public Double getTotalOrderPrice() {
+        List<SalesOrderProduct> orderProducts = getSalesOrderProducts();
+        return orderProducts.stream()
+                .mapToDouble(SalesOrderProduct::getTotalPrice)
+                .sum();
+    }
+
 
 
 

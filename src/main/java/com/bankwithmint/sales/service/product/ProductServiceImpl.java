@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author oluwatobi
@@ -27,6 +29,10 @@ public class ProductServiceImpl implements ProductService{
     ProductRepository productRepository;
 
     ProductMapper productMapper;
+
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock writeLock = lock.writeLock();
+    private final Lock readLock = lock.readLock();
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
@@ -82,4 +88,13 @@ public class ProductServiceImpl implements ProductService{
     public Product findById(Long productId) {
         return productRepository.findById(productId).orElse(null);
     }
+
+    @Override
+    public void updateQuantity(Product product, Integer quantityLess) {
+        Integer quantity = product.getQuantityInStock();
+        Integer newQuantity = quantity - quantityLess;
+        product.setQuantityInStock(newQuantity);
+        productRepository.save(product);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.bankwithmint.sales.service.order;
 
+import com.bankwithmint.sales.client.exceptions.OrderNotCreatedExeption;
 import com.bankwithmint.sales.data.dto.OrderDto;
 import com.bankwithmint.sales.data.models.SalesOrder;
 
@@ -12,5 +13,5 @@ import com.bankwithmint.sales.data.models.SalesOrder;
 
 
 public interface OrderService {
-    public SalesOrder createOrder(OrderDto order);
+    public SalesOrder createOrder(OrderDto order) throws OrderNotCreatedExeption;
 }

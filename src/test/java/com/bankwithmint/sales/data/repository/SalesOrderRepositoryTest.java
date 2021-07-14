@@ -2,7 +2,7 @@ package com.bankwithmint.sales.data.repository;
 
 import com.bankwithmint.sales.data.models.Customer;
 import com.bankwithmint.sales.data.models.SalesOrder;
-import com.bankwithmint.sales.data.models.OrdersProduct;
+import com.bankwithmint.sales.data.models.SalesOrderProduct;
 import com.bankwithmint.sales.data.models.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,9 +65,9 @@ class SalesOrderRepositoryTest {
         SalesOrder salesOrder = new SalesOrder();
         salesOrder.setCustomer(customer);
 
-        List<OrdersProduct> ordersProducts =initializeProducts(salesOrder);
+        List<SalesOrderProduct> salesOrderProducts =initializeProducts(salesOrder);
         //add product to order
-        salesOrder.setOrdersProducts(ordersProducts);
+        salesOrder.setSalesOrderProducts(salesOrderProducts);
 
         log.info("Order before save --> {}", salesOrder);
         orderRepository.save(salesOrder);
@@ -76,21 +76,21 @@ class SalesOrderRepositoryTest {
         log.info("Order after save --> {}", salesOrder);
         SalesOrder createdSalesOrder = orderRepository.findById(salesOrder.getId()).orElse(null);
         assertThat(createdSalesOrder).isNotNull();
-        assertThat(createdSalesOrder.getOrdersProducts().size()).isEqualTo(5);
+        assertThat(createdSalesOrder.getSalesOrderProducts().size()).isEqualTo(5);
         assertThat(createdSalesOrder.getCustomer()).isNotNull();
     }
 
-    private List<OrdersProduct> initializeProducts(SalesOrder salesOrder){
-        List<OrdersProduct> ordersProducts = new ArrayList<>();
+    private List<SalesOrderProduct> initializeProducts(SalesOrder salesOrder){
+        List<SalesOrderProduct> salesOrderProducts = new ArrayList<>();
 
         for(Product product : existingProducts ){
             int quantity = 1 + random.nextInt(10);
             if(checkAvailability(product, quantity)) {
-                ordersProducts.add(new OrdersProduct(salesOrder, product, quantity));
+                salesOrderProducts.add(new SalesOrderProduct(salesOrder, product, quantity));
                 product.setQuantityInStock(product.getQuantityInStock() - quantity);
             }
         }
-        return ordersProducts;
+        return salesOrderProducts;
     }
 
     private boolean checkAvailability(Product product, int quantity){

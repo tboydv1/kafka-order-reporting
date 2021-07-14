@@ -1,5 +1,6 @@
 package com.bankwithmint.sales.client.api;
 
+import com.bankwithmint.sales.client.exceptions.OrderNotCreatedExeption;
 import com.bankwithmint.sales.data.dto.OrderDto;
 import com.bankwithmint.sales.data.models.SalesOrder;
 import com.bankwithmint.sales.service.order.OrderService;
@@ -33,9 +34,15 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping({"", "/"})
-    public ResponseEntity<?> save(@Valid @RequestBody OrderDto orderDto)
+    public ResponseEntity<?> create(@Valid @RequestBody OrderDto orderDto)
     {
-        SalesOrder salesOrder = orderService.createOrder(orderDto);
+        SalesOrder salesOrder = null;
+        try {
+            salesOrder = orderService.createOrder(orderDto);
+        } catch (OrderNotCreatedExeption orderNotCreatedExeption) {
+
+            return ResponseEntity.badRequest().body(orderNotCreatedExeption.getMessage());
+        }
         return ResponseEntity.ok().body(salesOrder);
     }
 

@@ -39,7 +39,7 @@ class ProductRepositoryTest {
         Product product = new Product();
         product.setName("Fire Extinguisher");
         product.setDescription("Large fire extinguisher");
-        product.setPrice(BigDecimal.valueOf(500));
+        product.setPrice(500.00);
         product.setQuantityInStock(15);
 
         log.info("Product object before saving to DB --> {}", product);
@@ -72,7 +72,7 @@ class ProductRepositoryTest {
 
         //update Name
         existingProduct.setName("American Large Hammer");
-        existingProduct.setPrice(BigDecimal.valueOf(400.00));
+        existingProduct.setPrice(400.00);
 
         productRepository.save(existingProduct);
 

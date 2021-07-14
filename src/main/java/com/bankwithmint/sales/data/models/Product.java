@@ -34,7 +34,7 @@ public class Product extends RepresentationModel<Product> {
 
     @Column()
     @Setter @Getter
-    private BigDecimal price;
+    private Double price;
 
     @Getter
     @Setter
@@ -47,14 +47,14 @@ public class Product extends RepresentationModel<Product> {
     @Setter @Getter
     private LocalDateTime dateCreated;
 
-    public Product(String name, BigDecimal price, Integer quantityInStock, String description) {
+    public Product(String name, Double price, Integer quantityInStock, String description) {
         this.name = name;
         this.price = price;
         this.quantityInStock = quantityInStock;
         this.description = description;
     }
 
-    public Product(Long id, String name, BigDecimal price, Integer quantityInStock, String description) {
+    public Product(Long id, String name, Double price, Integer quantityInStock, String description) {
         this.id = id;
         this.name = name;
         this.price = price;

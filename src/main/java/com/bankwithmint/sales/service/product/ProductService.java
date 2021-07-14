@@ -21,4 +21,5 @@ public interface ProductService {
      Product updateProduct(ProductDto productDto, Long ProductId) throws ProductDoesNotExistsException;
      boolean exists(Long productId);
      Product findById(Long productId);
+     void updateQuantity(Product product, Integer quantityLess);
 }

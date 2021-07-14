@@ -4,7 +4,7 @@ import com.bankwithmint.sales.data.dto.OrderDto;
 import com.bankwithmint.sales.data.dto.OrderProductDto;
 import com.bankwithmint.sales.data.models.Customer;
 import com.bankwithmint.sales.data.models.SalesOrder;
-import com.bankwithmint.sales.data.models.OrdersProduct;
+import com.bankwithmint.sales.data.models.SalesOrderProduct;
 import com.bankwithmint.sales.data.models.Product;
 import com.bankwithmint.sales.data.repository.OrderRepository;
 import com.bankwithmint.sales.data.repository.ProductRepository;
@@ -81,12 +81,12 @@ class SalesOrderServiceImplTest {
 
         assertThat(orderDto).isNotNull();
         SalesOrder salesOrder = new SalesOrder();
-        List<OrdersProduct> ordersProducts = new ArrayList<>();
+        List<SalesOrderProduct> salesOrderProducts = new ArrayList<>();
 
         for(OrderProductDto orderProductDto : orderDto.getOrderProducts()){
             Product product = productRepository.findById(orderProductDto.getProductId()).orElse(null);
             if(product != null){
-                ordersProducts.add(new OrdersProduct(salesOrder, product, orderProductDto.getQuantity()));
+                salesOrderProducts.add(new SalesOrderProduct(salesOrder, product, orderProductDto.getQuantity()));
 
                 Integer newQuantity = Math.abs(product.getQuantityInStock() - orderProductDto.getQuantity());
                 product.setQuantityInStock(newQuantity);
@@ -95,8 +95,8 @@ class SalesOrderServiceImplTest {
                 assertThat(product.getQuantityInStock()).isEqualTo(newQuantity);
             }
         }
-        assertThat(ordersProducts.size()).isEqualTo(3);
-        salesOrder.setOrdersProducts(ordersProducts);
+        assertThat(salesOrderProducts.size()).isEqualTo(3);
+        salesOrder.setSalesOrderProducts(salesOrderProducts);
         salesOrder.setCustomer(orderDto.getCustomer());
     }
 
@@ -116,12 +116,12 @@ class SalesOrderServiceImplTest {
 
 
         SalesOrder salesOrder = new SalesOrder();
-        List<OrdersProduct> ordersProducts = new ArrayList<>();
+        List<SalesOrderProduct> salesOrderProducts = new ArrayList<>();
 
         for(OrderProductDto orderProductDto : orderDto.getOrderProducts()){
             Product product = productRepository.findById(orderProductDto.getProductId()).orElse(null);
             if(product != null){
-                ordersProducts.add(new OrdersProduct(salesOrder, product, orderProductDto.getQuantity()));
+                salesOrderProducts.add(new SalesOrderProduct(salesOrder, product, orderProductDto.getQuantity()));
 
                 Integer newQuantity = Math.abs(product.getQuantityInStock() - orderProductDto.getQuantity());
                 product.setQuantityInStock(newQuantity);
@@ -130,8 +130,8 @@ class SalesOrderServiceImplTest {
                 assertThat(product.getQuantityInStock()).isEqualTo(newQuantity);
             }
         }
-        assertThat(ordersProducts.size()).isEqualTo(1);
-        salesOrder.setOrdersProducts(ordersProducts);
+        assertThat(salesOrderProducts.size()).isEqualTo(1);
+        salesOrder.setSalesOrderProducts(salesOrderProducts);
         salesOrder.setCustomer(customer);
     }
 
@@ -148,12 +148,12 @@ class SalesOrderServiceImplTest {
         orderDto.setOrderProducts(orderProductsDto);
 
         SalesOrder salesOrder = new SalesOrder();
-        List<OrdersProduct> ordersProducts = new ArrayList<>();
+        List<SalesOrderProduct> salesOrderProducts = new ArrayList<>();
 
         orderDto.getOrderProducts().forEach(orderProductDto -> {
             Product product = productRepository.findById(orderProductDto.getProductId()).orElse(null);
             if (product != null) {
-                ordersProducts.add(new OrdersProduct(salesOrder, product, orderProductDto.getQuantity()));
+                salesOrderProducts.add(new SalesOrderProduct(salesOrder, product, orderProductDto.getQuantity()));
 
                 Integer newQuantity = Math.abs(product.getQuantityInStock() - orderProductDto.getQuantity());
                 product.setQuantityInStock(newQuantity);
@@ -177,8 +177,8 @@ class SalesOrderServiceImplTest {
         );
 
 
-        assertThat(ordersProducts.size()).isEqualTo(3);
-        salesOrder.setOrdersProducts(ordersProducts);
+        assertThat(salesOrderProducts.size()).isEqualTo(3);
+        salesOrder.setSalesOrderProducts(salesOrderProducts);
         salesOrder.setCustomer(orderDto.getCustomer());
     }
 

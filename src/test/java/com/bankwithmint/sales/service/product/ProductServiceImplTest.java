@@ -1,6 +1,5 @@
 package com.bankwithmint.sales.service.product;
 
-import com.bankwithmint.sales.client.exceptions.ProductDoesNotExistsException;
 import com.bankwithmint.sales.data.dto.ProductDto;
 import com.bankwithmint.sales.data.models.Product;
 import com.bankwithmint.sales.data.repository.ProductRepository;
@@ -11,15 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.configuration.MockAnnotationProcessor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -73,7 +69,7 @@ class ProductServiceImplTest {
     void getProductsTest(){
 
         List<Product> products = new ArrayList<>();
-        products.add(new Product(22L, "Hammer",  BigDecimal.valueOf(1400), 24,"this is a Big Hammer"));
+        products.add(new Product(22L, "Hammer", 1400.00, 24,"this is a Big Hammer"));
 
         when(productService.getProducts()).thenReturn(products);
         productService.getProducts();
@@ -84,7 +80,31 @@ class ProductServiceImplTest {
     }
 
 
+    @Test
+    void createProduct() {
+    }
 
+    @Test
+    void getProducts() {
+    }
 
+    @Test
+    void updateProduct() {
+    }
 
+    @Test
+    void exists() {
+    }
+
+    @Test
+    void findById() {
+    }
+
+    @Test
+    void updateQuantity() {
+    }
+
+    @Test
+    void getAvailableProducts() {
+    }
 }
