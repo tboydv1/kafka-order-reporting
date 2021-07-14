@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts={"classpath:/db/insert.sql"})
-class OrderControllerTest {
+class SalesOrderControllerTest {
 
 
     @Autowired

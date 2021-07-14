@@ -1,14 +1,10 @@
 package com.bankwithmint.sales.client.api;
 
 import com.bankwithmint.sales.data.dto.OrderDto;
-import com.bankwithmint.sales.data.dto.ProductDto;
-import com.bankwithmint.sales.data.models.Order;
-import com.bankwithmint.sales.data.models.Product;
-import com.bankwithmint.sales.data.repository.OrderRepository;
+import com.bankwithmint.sales.data.models.SalesOrder;
 import com.bankwithmint.sales.service.order.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author oluwatobi
@@ -40,8 +35,8 @@ public class OrderController {
     @PostMapping({"", "/"})
     public ResponseEntity<?> save(@Valid @RequestBody OrderDto orderDto)
     {
-        Order order = orderService.createOrder(orderDto);
-        return ResponseEntity.ok().body(order);
+        SalesOrder salesOrder = orderService.createOrder(orderDto);
+        return ResponseEntity.ok().body(salesOrder);
     }
 
 }

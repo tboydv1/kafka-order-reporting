@@ -16,17 +16,17 @@ import java.io.Serializable;
 
 @Embeddable
 @NoArgsConstructor
-public class OrderProductKey implements Serializable {
+public class OrdersProductKey implements Serializable {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Getter
-    private Order order;
+    private SalesOrder salesOrder;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Getter
     private Product product;
 
-    public OrderProductKey(Order order, Product product){
-        this.order = order;
+    public OrdersProductKey(SalesOrder salesOrder, Product product){
+        this.salesOrder = salesOrder;
         this.product = product;
     }
 

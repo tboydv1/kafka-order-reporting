@@ -1,7 +1,6 @@
 package com.bankwithmint.sales.data.dto;
 
 import com.bankwithmint.sales.data.models.Customer;
-import com.bankwithmint.sales.data.models.OrderProduct;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

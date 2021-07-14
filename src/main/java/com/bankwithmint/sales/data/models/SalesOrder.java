@@ -17,10 +17,10 @@ import java.util.List;
  * inside the package - com.bankwithmint.sales.data.models
  */
 @Entity()
-@Table(name = "orders")
+@Table(name = "sales_order")
 @Data
 @EqualsAndHashCode(callSuper = true) //Ignoring call to super Object
-public class Order extends RepresentationModel<Order> {
+public class SalesOrder extends RepresentationModel<SalesOrder> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,15 @@ public class Order extends RepresentationModel<Order> {
     private Customer customer;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<OrderProduct> orderProducts;
+    private List<OrdersProduct> ordersProducts;
 
     @CreationTimestamp
     private LocalDateTime dateCreated;
 
     private Double TotalPrice;
 
-    public Order(){
-        orderProducts = new ArrayList<>();
+    public SalesOrder(){
+        ordersProducts = new ArrayList<>();
     }
 
 

@@ -16,11 +16,11 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class OrderProduct {
+public class OrdersProduct {
 
     @EmbeddedId
     @JsonIgnore
-    private OrderProductKey orderProductKey;
+    private OrdersProductKey ordersProductKey;
 
     @Column(nullable = false)
     private Double productPrice;
@@ -28,8 +28,8 @@ public class OrderProduct {
     @Column(nullable = false)
     private Integer quantity;
 
-    public OrderProduct(Order order, Product product, Integer quantity){
-        this.orderProductKey = new OrderProductKey(order, product);
+    public OrdersProduct(SalesOrder salesOrder, Product product, Integer quantity){
+        this.ordersProductKey = new OrdersProductKey(salesOrder, product);
         this.productPrice = product.getPrice().doubleValue() * quantity;
         this.quantity = quantity;
     }

@@ -1,8 +1,8 @@
 package com.bankwithmint.sales.data.repository;
 
 import com.bankwithmint.sales.data.models.Customer;
-import com.bankwithmint.sales.data.models.Order;
-import com.bankwithmint.sales.data.models.OrderProduct;
+import com.bankwithmint.sales.data.models.SalesOrder;
+import com.bankwithmint.sales.data.models.OrdersProduct;
 import com.bankwithmint.sales.data.models.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {"classpath:/db/insert.sql"})
 @Transactional
 @Rollback(value = false)
-class OrderRepositoryTest {
+class SalesOrderRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
@@ -62,35 +62,35 @@ class OrderRepositoryTest {
     @Test
     void WhenOrderIsCreated_thenPersistToDBTest(){
 
-        Order order = new Order();
-        order.setCustomer(customer);
+        SalesOrder salesOrder = new SalesOrder();
+        salesOrder.setCustomer(customer);
 
-        List<OrderProduct> orderProducts =initializeProducts(order);
+        List<OrdersProduct> ordersProducts =initializeProducts(salesOrder);
         //add product to order
-        order.setOrderProducts(orderProducts);
+        salesOrder.setOrdersProducts(ordersProducts);
 
-        log.info("Order before save --> {}", order);
-        orderRepository.save(order);
-        assertThat(order.getId()).isNotNull();
+        log.info("Order before save --> {}", salesOrder);
+        orderRepository.save(salesOrder);
+        assertThat(salesOrder.getId()).isNotNull();
 
-        log.info("Order after save --> {}", order);
-        Order createdOrder = orderRepository.findById(order.getId()).orElse(null);
-        assertThat(createdOrder).isNotNull();
-        assertThat(createdOrder.getOrderProducts().size()).isEqualTo(5);
-        assertThat(createdOrder.getCustomer()).isNotNull();
+        log.info("Order after save --> {}", salesOrder);
+        SalesOrder createdSalesOrder = orderRepository.findById(salesOrder.getId()).orElse(null);
+        assertThat(createdSalesOrder).isNotNull();
+        assertThat(createdSalesOrder.getOrdersProducts().size()).isEqualTo(5);
+        assertThat(createdSalesOrder.getCustomer()).isNotNull();
     }
 
-    private List<OrderProduct> initializeProducts(Order order){
-        List<OrderProduct> orderProducts = new ArrayList<>();
+    private List<OrdersProduct> initializeProducts(SalesOrder salesOrder){
+        List<OrdersProduct> ordersProducts = new ArrayList<>();
 
         for(Product product : existingProducts ){
             int quantity = 1 + random.nextInt(10);
             if(checkAvailability(product, quantity)) {
-                orderProducts.add(new OrderProduct(order, product, quantity));
+                ordersProducts.add(new OrdersProduct(salesOrder, product, quantity));
                 product.setQuantityInStock(product.getQuantityInStock() - quantity);
             }
         }
-        return orderProducts;
+        return ordersProducts;
     }
 
     private boolean checkAvailability(Product product, int quantity){
