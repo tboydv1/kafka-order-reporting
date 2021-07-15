@@ -3,7 +3,7 @@ package com.bankwithmint.client.api;
 import com.bankwithmint.client.exceptions.OrderNotCreatedExeption;
 import com.bankwithmint.data.dto.OrderDto;
 import com.bankwithmint.data.models.SalesOrder;
-import com.bankwithmint.service.order.OrderService;
+import com.bankwithmint.service.order.SalesOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +31,14 @@ public class OrderController {
 
 
     @Autowired
-    OrderService orderService;
+    SalesOrderService salesOrderService;
 
     @PostMapping({"", "/"})
     public ResponseEntity<?> create(@Valid @RequestBody OrderDto orderDto)
     {
         SalesOrder salesOrder = null;
         try {
-            salesOrder = orderService.createOrder(orderDto);
+            salesOrder = salesOrderService.createOrder(orderDto);
         } catch (OrderNotCreatedExeption orderNotCreatedExeption) {
 
             return ResponseEntity.badRequest().body(orderNotCreatedExeption.getMessage());

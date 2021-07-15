@@ -64,12 +64,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
 
-
+    /**
+     * 
+     * @param productDto
+     * @param id
+     * @return
+     * @throws ProductDoesNotExistsException
+     */
     @Override
     public Product updateProduct(ProductDto productDto, Long id) throws ProductDoesNotExistsException {
 
         Product product = productRepository.findById(id)
-                .orElseThrow( () -> new ProductDoesNotExistsException("Product with id === "+id+" does not exist"));
+                .orElseThrow( () -> new ProductDoesNotExistsException("Product with id == "+id+" does not exist"));
 
         //maps productdto to product ignoring null values
         productMapper.mapToProduct(productDto,product);
@@ -79,16 +85,32 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
+    /**
+     * 
+     * @param productId
+     * @return
+     */
     @Override
     public boolean exists(Long productId) {
         return productRepository.findById(productId).isPresent();
     }
 
+    /**
+     * 
+     * @param productId
+     * @return
+     */
     @Override
     public Product findById(Long productId) {
         return productRepository.findById(productId).orElse(null);
     }
 
+
+    /**
+     * 
+     * @param product
+     * @param quantityLess
+     */
     @Override
     public void updateQuantity(Product product, Integer quantityLess) {
         Integer quantity = product.getQuantityInStock();

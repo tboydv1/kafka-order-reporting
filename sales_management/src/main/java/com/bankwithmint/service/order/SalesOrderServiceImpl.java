@@ -27,7 +27,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Autowired
     OrderRepository orderRepository;
@@ -44,9 +44,15 @@ public class OrderServiceImpl implements OrderService {
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock writeLock = lock.writeLock();
-    private final Lock readLock = lock.readLock();
 
 
+    /**
+     * Handles Concurrent write access by obtaining a write lock, 
+     * to perform and synchronized update on product
+     * @param orderDto
+     * @return
+     * @throws OrderNotCreatedExeption
+     */
     @Override
     public SalesOrder createOrder(OrderDto orderDto) throws OrderNotCreatedExeption {
 
@@ -76,6 +82,10 @@ public class OrderServiceImpl implements OrderService {
         return salesOrder;
     }
 
+    /**
+     * 
+     * @param salesOrder
+     */
     private void publishOrderReports(SalesOrder salesOrder) {
 
         ReportData reportData = new ReportData();
@@ -93,10 +103,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /**
+     * 
+     * @param product
+     * @param quantity
+     * @return
+     */
     private boolean productIsAvailable(Product product, Integer quantity) {
         return product != null && product.getQuantityInStock() >= quantity;
     }
 
+
+    /**
+     * 
+     * @param salesOrder
+     * @param orderDto
+     * @return
+     */
     private List<SalesOrderProduct> initializeProductOrders(SalesOrder salesOrder, List<OrderProductDto> orderDto) {
         List<SalesOrderProduct> products = new ArrayList<>();
 

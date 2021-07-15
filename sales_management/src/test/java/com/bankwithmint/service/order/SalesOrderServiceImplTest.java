@@ -1,5 +1,6 @@
 package com.bankwithmint.service.order;
 
+import com.bankwithmint.client.exceptions.OrderNotCreatedExeption;
 import com.bankwithmint.data.models.SalesOrderProduct;
 import com.bankwithmint.data.dto.OrderDto;
 import com.bankwithmint.data.dto.OrderProductDto;
@@ -19,8 +20,6 @@ import org.springframework.test.context.jdbc.Sql;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Rollback(value = false)
 class SalesOrderServiceImplTest {
 
+
     OrderDto orderDto;
 
     @Autowired
@@ -45,6 +45,10 @@ class SalesOrderServiceImplTest {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    SalesOrderService salesOrderService;
+
+
     Customer customer;
 
     @BeforeEach
@@ -52,13 +56,16 @@ class SalesOrderServiceImplTest {
 
         orderDto = new OrderDto();
 
+
         //Creating 3 order products
         List<OrderProductDto> orderProducts =
                 List.of(OrderProductDto.builder().productId(23L).quantity(3).build(),
                         OrderProductDto.builder().productId(24L).quantity(2).build(),
                         OrderProductDto.builder().productId(25L).quantity(1).build());
 
+
         orderDto.setOrderProducts(orderProducts);
+
 
         customer = new Customer();
         customer.setName("John Doe");
@@ -76,9 +83,7 @@ class SalesOrderServiceImplTest {
 
     @Test
     void whenOrderIsSent_thenValidate_andCreateOrder(){
-
-        orderDto = new OrderDto();
-
+        
         assertThat(orderDto).isNotNull();
         SalesOrder salesOrder = new SalesOrder();
         List<SalesOrderProduct> salesOrderProducts = new ArrayList<>();
@@ -136,51 +141,17 @@ class SalesOrderServiceImplTest {
     }
 
     @Test
-    void createOrderUsingLambdasTest(){
-        OrderDto orderDto = new OrderDto();
+    void createOrderTest() throws OrderNotCreatedExeption {
 
-        List<OrderProductDto> orderProductsDto =
-                List.of(OrderProductDto.builder().productId(231L).quantity(3).build(),
-                        OrderProductDto.builder().productId(242L).quantity(2).build(),
-                        OrderProductDto.builder().productId(25L).quantity(1).build());
-
-
-        orderDto.setOrderProducts(orderProductsDto);
-
-        SalesOrder salesOrder = new SalesOrder();
-        List<SalesOrderProduct> salesOrderProducts = new ArrayList<>();
-
-        orderDto.getOrderProducts().forEach(orderProductDto -> {
-            Product product = productRepository.findById(orderProductDto.getProductId()).orElse(null);
-            if (product != null) {
-                salesOrderProducts.add(new SalesOrderProduct(salesOrder, product, orderProductDto.getQuantity()));
-
-                Integer newQuantity = Math.abs(product.getQuantityInStock() - orderProductDto.getQuantity());
-                product.setQuantityInStock(newQuantity);
-                productRepository.save(product);
-
-                assertThat(product.getQuantityInStock()).isEqualTo(newQuantity);
-            }
-        });
-
-
-        Map<Object, List<OrderProductDto>> result = orderDto.getOrderProducts().stream()
-                .collect(Collectors.groupingBy(orderProductDto -> productRepository.findById(orderProductDto.getProductId())));
-
-        result.forEach(
-                (department, employeesInDepartment) ->
-                {
-                    System.out.println(department);
-                    employeesInDepartment.forEach(
-                            employee -> System.out.printf("%s%n", employee));
-                }
-        );
-
-
-        assertThat(salesOrderProducts.size()).isEqualTo(3);
-        salesOrder.setSalesOrderProducts(salesOrderProducts);
-        salesOrder.setCustomer(orderDto.getCustomer());
+        assertThat(orderDto).isNotNull();
+        SalesOrder order = salesOrderService.createOrder(orderDto);
+        assertThat(order).isNotNull();
+        assertThat(order.getId()).isNotNull();
+        assertThat(order.getSalesOrderProducts().size()).isEqualTo(3);
     }
+
+
+
 
 
 

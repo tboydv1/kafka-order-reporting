@@ -25,7 +25,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 
 @RestController
-@RequestMapping("v1/api/products")
+@RequestMapping("/v1/api/products")
 @Slf4j
 public class ProductController {
 

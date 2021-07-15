@@ -17,6 +17,17 @@ Install Maven Dependencies
 
 `mvn install`
 
+_This application listens to kafka events on localhost:9092. Ensure Kafka is running locally_
+
+
+Setup Database
+
+`cd into the src/main/resources/db folder
+`
+
+`run the setup.sql in mysql client`
+
+
 **Use Cases**
 
 _Get all Reports grouped By date_

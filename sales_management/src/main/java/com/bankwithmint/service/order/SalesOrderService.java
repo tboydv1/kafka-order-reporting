@@ -12,6 +12,6 @@ import com.bankwithmint.data.models.SalesOrder;
  */
 
 
-public interface OrderService {
+public interface SalesOrderService {
     public SalesOrder createOrder(OrderDto order) throws OrderNotCreatedExeption;
 }
