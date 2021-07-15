@@ -58,30 +58,6 @@ class ProductControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    @Test
-    void getProducts() {
-    }
-
-    @Test
-    void save() {
-    }
-
-    @Test
-    void findById() {
-    }
-
-    @Test
-    void updateEmployee() {
-    }
-
-//    @Test
-//    void findEmployeeByIdTest() throws Exception {
-//
-//        mockMvc.perform(get("/employee/12"))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//    }
-
 
 
 
