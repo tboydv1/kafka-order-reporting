@@ -7,6 +7,11 @@
 This is a sales report service, that consumes sales order message from Kafka, and persist data to database for retrieval
 
 
+**Postman** ==> https://documenter.getpostman.com/view/10973323/TzmBBt5n
+
+
+
+
 **Setup**
 
 Clone project 
@@ -59,6 +64,9 @@ Request Body
    "from": "2021-07-10",
    "to": "2021-11-15"
  }`
+ 
+ 
+
 
     
     

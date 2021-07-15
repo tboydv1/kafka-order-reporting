@@ -4,6 +4,8 @@
 
 A Sales/Inventory Management Application in Java using Spring Boot (RestController) with an API(JSON) that supports the following
 
+**Postman** ==> https://documenter.getpostman.com/view/10973323/TzmBBt5n
+
 
 **Setup**
 
