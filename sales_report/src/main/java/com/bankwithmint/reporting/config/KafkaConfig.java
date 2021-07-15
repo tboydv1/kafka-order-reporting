@@ -45,7 +45,7 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, ReportData> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ReportData> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(reportDataConsumerFactory());
-        factory.getContainerProperties().setIdleBetweenPolls(10000L);
+        factory.getContainerProperties().setIdleBetweenPolls(1000L);
         return factory;
     }
 

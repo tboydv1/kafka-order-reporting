@@ -2,9 +2,7 @@ package com.bankwithmint.reporting.service;
 
 import com.bankwithmint.reporting.data.ApiResponse;
 import com.bankwithmint.reporting.data.ReportData;
-import com.bankwithmint.reporting.data.ReportDataRepository;
 import com.bankwithmint.reporting.data.ReportRequestDto;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

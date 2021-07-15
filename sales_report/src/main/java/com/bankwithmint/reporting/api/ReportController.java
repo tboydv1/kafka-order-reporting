@@ -37,7 +37,7 @@ public class ReportController {
     }
 
 
-    @GetMapping("/data-range")
+    @GetMapping("/date-range")
     public ResponseEntity<?> getReportByDateRange(@Valid @RequestBody ReportRequestDto reportRequestDto){
 
 

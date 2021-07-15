@@ -1,5 +1,6 @@
-package com.bankwithmint.reporting.data;
+package com.bankwithmint.reporting.repository;
 
+import com.bankwithmint.reporting.data.ReportData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
